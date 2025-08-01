@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR ${ROBOT_WS}
 COPY robot_ws/src /robot_ws/src
 # Install dependencies
-RUN apt update && rosdep install -y -r -i --rosdistro ${ROS_DISTRO} --from-paths /robot_ws/src
+RUN apt update && rosdep init && rosdep update && rosdep install -y -r -i --rosdistro ${ROS_DISTRO} --from-paths /robot_ws/src
 RUN . /opt/ros/humble/setup.sh && colcon build
 
 # Source the workspace
