@@ -11,11 +11,19 @@ ament_environment_hooks(
 )
 
 set(SCRIPTS_DIR scripts)
+set(SDF_DIR panda)
+set(URDF_DIR urdf)
 install(PROGRAMS
     ${SCRIPTS_DIR}/xacro2sdf_direct.bash
     ${SCRIPTS_DIR}/xacro2sdf.bash
     ${SCRIPTS_DIR}/xacro2urdf.bash
+    ${SDF_DIR}/model.sdf
     DESTINATION lib/${PROJECT_NAME}
+)
+
+install (PROGRAMS
+    ${URDF_DIR}/panda.urdf.xacro
+    DESTINATION lib/urdf
 )
 
 # Install directories
