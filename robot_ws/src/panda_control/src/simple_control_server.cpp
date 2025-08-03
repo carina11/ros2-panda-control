@@ -45,41 +45,7 @@ public:
 
     control_subscriber = node_->create_subscription<geometry_msgs::msg::PoseStamped>("control", 10, 
         [this, height, width](geometry_msgs::msg::PoseStamped::SharedPtr msg){
-            // RCLCPP_WARN(node_->get_logger(), "Hello");
-            
             move_to_point(msg);
-
-            // std::map<std::string, double> goal_values;
-            // std::string command_horizontal, command_vertical; 
-            // if (msg->pose.position.x < width / 2){
-            //   command_horizontal = "left";
-            // }else{
-            //   command_horizontal = "right";
-            // }
-            // if (msg->pose.position.y < height / 2){
-            //   command_vertical = "up";
-            // }else{
-            //   command_vertical = "down";
-            // }
-
-            // if(command_horizontal == "left"){
-            //     goal_values["panda_joint1"] = joint_values["panda_joint1"] + (5.0 * M_PI / 180.0);
-            // }else if(command_horizontal == "right"){
-            //     goal_values["panda_joint1"] = joint_values["panda_joint1"] - (5.0 * M_PI / 180.0);
-            // } 
-            // if(command_vertical == "up") {
-            //     goal_values["panda_joint6"] = joint_values["panda_joint6"] + (5.0 * M_PI / 180.0);
-            // }else if(command_vertical == "down") {
-            //     goal_values["panda_joint6"] = joint_values["panda_joint6"] - (5.0 * M_PI / 180.0);
-            // }
-            // // goal_values["panda_joint1"] = ;
-            // goal_values["panda_joint2"] = -65.0 * M_PI / 180.0;
-            // goal_values["panda_joint3"] = 0.0 * M_PI / 180.0;
-            // goal_values["panda_joint4"] = -95.0 * M_PI / 180.0;
-            // goal_values["panda_joint5"] = 0.0 * M_PI / 180.0;
-            // // goal_values["panda_joint6"] = 120.0 * M_PI / 180.0;
-            // goal_values["panda_joint7"] = 45.0 * M_PI / 180.0;
-            // set_joints(goal_values);
         }
     );
   }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(panda_control)
+project(panda_control_msgs)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -16,26 +16,16 @@ find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs)
 find_package(moveit_ros_planning_interface)
-find_package(panda_control_msgs)
+find_package(rosidl_default_generators REQUIRED)
 
 
-add_executable(simple_control_server src/simple_control_server.cpp)
-ament_target_dependencies(simple_control_server rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
-add_executable(move_to_pose_server src/move_to_pose_server.cpp)
-ament_target_dependencies(move_to_pose_server rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
-
-install(TARGETS
-  simple_control_server
-  move_to_pose_server
-#   arm_pose_publisher
-  DESTINATION lib/${PROJECT_NAME})
+find_package(geometry_msgs REQUIRED)
+  rosidl_generate_interfaces(${PROJECT_NAME}
+    "srv/MoveToPose.srv"
+    DEPENDENCIES geometry_msgs
+  )
 
 
-# Install launch files
-install(
-  DIRECTORY launch/
-  DESTINATION share/${PROJECT_NAME}/launch
-)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -48,5 +38,5 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
-
+ament_export_dependencies(rosidl_default_runtime)
 ament_package()

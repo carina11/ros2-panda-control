@@ -16,10 +16,17 @@ def generate_launch_description():
     robot_description_semantic = {'robot_description_semantic': open(srdf_file).read()}
 
     return LaunchDescription([
+        # Node(
+        #     package="panda_control",
+        #     executable="simple_control_server",
+        #     name="simple_control_server",
+        #     output="screen",
+        #     parameters=[robot_description, robot_description_semantic]
+        # ),
         Node(
             package="panda_control",
-            executable="simple_control_server",
-            name="simple_control_server",
+            executable="move_to_pose_server",
+            name="move_to_pose_server",
             output="screen",
             parameters=[robot_description, robot_description_semantic]
         )
