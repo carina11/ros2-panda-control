@@ -23,10 +23,14 @@ add_executable(simple_control_server src/simple_control_server.cpp)
 ament_target_dependencies(simple_control_server rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
 add_executable(move_to_pose_server src/move_to_pose_server.cpp)
 ament_target_dependencies(move_to_pose_server rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
+add_executable(current_pose_publisher src/current_pose_publisher.cpp)
+ament_target_dependencies(current_pose_publisher rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
+
 
 install(TARGETS
   simple_control_server
   move_to_pose_server
+  current_pose_publisher
 #   arm_pose_publisher
   DESTINATION lib/${PROJECT_NAME})
 

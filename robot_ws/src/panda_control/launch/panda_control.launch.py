@@ -29,5 +29,12 @@ def generate_launch_description():
             name="move_to_pose_server",
             output="screen",
             parameters=[robot_description, robot_description_semantic]
+        ), 
+        Node(
+            package="panda_control",
+            executable="current_pose_publisher",
+            name="current_pose_publisher",
+            output="screen",
+            parameters=[robot_description, robot_description_semantic, {"use_sim_time": True}]
         )
     ])
