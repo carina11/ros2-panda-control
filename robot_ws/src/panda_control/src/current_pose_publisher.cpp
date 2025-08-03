@@ -30,7 +30,7 @@ private:
     {
       // Replace these frame names as needed
       const std::string base_frame = "panda_link0";
-      const std::string ee_frame = "panda_leftfinger";
+      const std::string ee_frame = "panda_hand_tcp";
 
       geometry_msgs::msg::TransformStamped transform =
           tf_buffer_->lookupTransform(base_frame, ee_frame, tf2::TimePointZero);
