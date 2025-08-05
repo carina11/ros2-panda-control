@@ -13,8 +13,10 @@ RUN apt-get update && apt-get install -y \
     libgtest-dev \
     python3-colcon-common-extensions \
     python3-rosdep \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pip3 install websockets
 
 # Build the BehaviorTree.CPP
 

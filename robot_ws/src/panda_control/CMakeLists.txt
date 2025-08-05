@@ -34,6 +34,11 @@ install(TARGETS
 #   arm_pose_publisher
   DESTINATION lib/${PROJECT_NAME})
 
+install(PROGRAMS
+  panda_control/virtual_joy_to_move_command.py
+  panda_control/backend.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 # Install launch files
 install(
