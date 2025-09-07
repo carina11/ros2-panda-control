@@ -40,17 +40,17 @@ private:
     {
       // Execute the planned trajectory
       move_group_interface_->move();
+      response->success = true;
+      response->message = "Moved to the target pose successfully";
     }
     else
     {
       RCLCPP_ERROR(node_->get_logger(), "Planning failed");
+      response->success = false;
+      response->message = "Planning failed";
     }
     RCLCPP_INFO(node_->get_logger(), "Received target pose: [%.2f, %.2f, %.2f]",
                 pose.position.x, pose.position.y, pose.position.z);
-
-    // Simulate processing
-    response->success = true;
-    response->message = "Moved to the target pose successfully.";
 
     RCLCPP_INFO(node_->get_logger(), "MoveToPose response sent.");
   }
