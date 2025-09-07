@@ -1,5 +1,5 @@
 services:
-  follow-face:
+  panda-control:
     container_name: panda-control
     image: panda-control:latest
     network_mode: host
