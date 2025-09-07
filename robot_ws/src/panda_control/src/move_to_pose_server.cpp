@@ -14,6 +14,7 @@ public:
   {
     node_ = rclcpp::Node::make_shared("move_to_pose_server");
     move_group_interface_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(node_, "arm");
+    move_group_interface_->setPoseReferenceFrame("panda_link0");
 
     service_ = node_->create_service<panda_control_msgs::srv::MoveToPose>(
       "move_to_pose",
