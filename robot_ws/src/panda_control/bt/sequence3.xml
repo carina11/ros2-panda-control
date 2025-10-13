@@ -1,0 +1,20 @@
+
+<root main_tree_to_execute="sequence3">
+  <BehaviorTree ID="sequence3">
+    <Sequence name="sequence_kinesics">
+      <Sequence name="holen">
+        <MoveArmAction joint_angles="{nod_joints}"/>
+        <MoveArmAction joint_angles="{start_joints}"/>
+        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        <MoveArmAction joint_angles="{bend_forward_joints}"/>
+        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        <MoveArmAction joint_angles="{start_joints}"/>
+        <SleepAction duration="4.0"/>
+      </Sequence>
+      <Sequence name="kinesics_geben">
+        <MoveArmAction joint_angles="{proxemics_handover}"/>
+        <MoveArmAction joint_angles="{endjoint}"/>
+      </Sequence>
+    </Sequence>
+  </BehaviorTree>
+</root>

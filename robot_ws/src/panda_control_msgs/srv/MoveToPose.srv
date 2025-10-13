@@ -1,4 +1,5 @@
 geometry_msgs/Pose target_pose
+float64 gripper_width
 ---
 bool success
 string message

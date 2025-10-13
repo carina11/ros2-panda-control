@@ -1,0 +1,9 @@
+[0.000000] (-) TimerEvent: {}
+[0.000518] (-) JobUnselected: {'identifier': 'panda'}
+[0.000609] (-) JobUnselected: {'identifier': 'panda_control_msgs'}
+[0.000630] (-) JobUnselected: {'identifier': 'panda_description'}
+[0.000648] (-) JobUnselected: {'identifier': 'panda_moveit_config'}
+[0.000666] (panda_control) JobQueued: {'identifier': 'panda_control', 'dependencies': OrderedDict({'panda_control_msgs': '/home/alexandrap/Dokumente/workspace2/ros2-panda-control/install/panda_control_msgs'})}
+[0.000692] (panda_control) JobStarted: {'identifier': 'panda_control'}
+[0.026383] (panda_control) JobEnded: {'identifier': 'panda_control', 'rc': 1}
+[0.036888] (-) EventReactorShutdown: {}

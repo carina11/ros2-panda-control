@@ -19,7 +19,21 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install websockets
 
 # Build the BehaviorTree.CPP
+# Install BehaviorTree.CPP
+RUN git clone https://github.com/BehaviorTree/BehaviorTree.CPP.git && \
+    cd BehaviorTree.CPP && \
+    git checkout v3.8 && \
+    mkdir build && cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig
 
+# Set environment variables
+ENV CMAKE_PREFIX_PATH=/usr/local:$CMAKE_PREFIX_PATH
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+# Create and build the ROS2 workspace
 WORKDIR ${ROBOT_WS}
 COPY robot_ws/src /robot_ws/src
 # Install dependencies

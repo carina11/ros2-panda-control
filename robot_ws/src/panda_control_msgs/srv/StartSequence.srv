@@ -1,0 +1,4 @@
+int32 sequence_id
+---
+bool success
+string message

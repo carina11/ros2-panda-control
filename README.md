@@ -37,8 +37,10 @@ ros2 service call /move_to_pose panda_control_msgs/srv/MoveToPose "target_pose:
     w: 0.0"
 ```
 
-## Useful topics
+
 ```
-# To check the current pose
-ros2 topic echo /current_pose
-```
+## How to launch the Behavior Tree 
+- Start simulation: `ros2 launch panda ign.launch.py`
+- Start BT: `ros2 launch panda_control bt_launch.py`
+- Rufe die gewünsche Sequence auf: `ros2 service call /start_sequence panda_control_msgs/srv/StartSequence "sequence_id: 1`
+--> ersetze die 1 durch die gewünscht ID 

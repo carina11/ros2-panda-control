@@ -16,22 +16,22 @@ find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs)
 find_package(moveit_ros_planning_interface)
-find_package(panda_control_msgs)
+find_package(panda_control_msgs REQUIRED)
+
+set(CMAKE_PREFIX_PATH "/usr/local" ${CMAKE_PREFIX_PATH})
+find_package(behaviortree_cpp_v3 REQUIRED)
+find_package(moveit_ros_planning_interface REQUIRED)
 
 
-add_executable(simple_control_server src/simple_control_server.cpp)
-ament_target_dependencies(simple_control_server rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
 add_executable(move_to_pose_server src/move_to_pose_server.cpp)
 ament_target_dependencies(move_to_pose_server rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
-add_executable(current_pose_publisher src/current_pose_publisher.cpp)
-ament_target_dependencies(current_pose_publisher rclcpp std_msgs moveit_ros_planning_interface geometry_msgs panda_control_msgs)
-
+add_executable(bt_main src/bt_main.cpp src/bt_nodes/move_arm_action.cpp src/bt_nodes/sleep_action.cpp src/bt_nodes/gripper_action.cpp)
+ament_target_dependencies(bt_main rclcpp moveit_ros_planning_interface behaviortree_cpp_v3 panda_control_msgs)  # panda_control_msgs hinzufügen
+target_link_libraries(bt_main BT::behaviortree_cpp_v3)
 
 install(TARGETS
-  simple_control_server
   move_to_pose_server
-  current_pose_publisher
-#   arm_pose_publisher
+  bt_main
   DESTINATION lib/${PROJECT_NAME})
 
 install(PROGRAMS
@@ -39,7 +39,7 @@ install(PROGRAMS
   panda_control/backend.py
   DESTINATION lib/${PROJECT_NAME}
 )
-
+install(DIRECTORY bt/ DESTINATION share/${PROJECT_NAME}/bt/)
 # Install launch files
 install(
   DIRECTORY launch/

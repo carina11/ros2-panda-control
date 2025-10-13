@@ -1,0 +1,16 @@
+<root main_tree_to_execute="sequence1">
+  <BehaviorTree ID="sequence1">
+    <Sequence name="sequence_basis">
+      <Sequence name="holen">
+        <MoveArmAction joint_angles="{start_joints}"/>
+        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        <MoveArmAction joint_angles="{bend_forward_joints}"/>
+        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        <MoveArmAction joint_angles="{start_joints}"/>
+      </Sequence>
+      <Sequence name="basic_geben">
+        <MoveArmAction joint_angles="{proxemics_handover}">
+      </Sequence>
+    </Sequence>
+  </BehaviorTree>
+</root>
