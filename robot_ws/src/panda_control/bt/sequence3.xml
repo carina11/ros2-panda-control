@@ -2,19 +2,43 @@
 <root main_tree_to_execute="sequence3">
   <BehaviorTree ID="sequence3">
     <Sequence name="sequence_kinesics">
-      <Sequence name="holen">
-        <MoveArmAction joint_angles="{nod_joints}"/>
+      <Sequence name="Listening">
         <MoveArmAction joint_angles="{start_joints}"/>
-        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        <MoveArmAction joint_angles="{nod_joints}" velocity_scale="0.9" accel_scale="0.9"/>
+        <SleepAction duration="3.0"/>  <!--Warte auf Aufgabenbeschreibung, Watching -->
+      </Sequence>
+      <Sequence name="Head_Nod">
+        <Repeat num_cycles="3">
+          <Sequence>
+            <MoveArmAction joint_angles="{nod_joints}" velocity_scale="0.8" accel_scale="0.8"/>
+            <MoveArmAction joint_angles="{nod_joints2}" velocity_scale="0.8" accel_scale="0.8"/>
+          </Sequence>
+        </Repeat>
+      </Sequence> 
+      <Sequence name="Abholen">
         <MoveArmAction joint_angles="{bend_forward_joints}"/>
-        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <Repeat num_cycles="2"> <!--Ist das Dieses Objekt ? -->
+          <Sequence>
+            <MoveArmAction joint_angles="{this_object}" accel_scale="1.0"/>
+            <MoveArmAction joint_angles="{bend_forward_joints}" accel_scale="1.0"/>
+          </Sequence>
+        </Repeat>
+        <SleepAction duration="2.0"/>  <!-- 3 Sekunden warten, Auf JA/NEIN warten -->
+        <MoveArmAction joint_angles="{take_object_joints}"/>
+        <GripperAction finger1="0.03" finger2="0.03" gripper_time="0.5"/>
+        <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> <!-- Objekt greifen -->
+        <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="1.0"/>
+        <MoveArmAction joint_angles="{proxemics_handover}" accel_scale="0.8"/>
+        <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
+        <MoveArmAction joint_angles="{take_object_kinesics}" accel_scale="0.4"/>
+        <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/> 
+        <MoveArmAction joint_angles="{nod_joints}"/> 
+        <SleepAction duration="5.0"/>  <!-- Warten Auf Rückmeldung/Befehl zum Ende Der Aktion -->
         <MoveArmAction joint_angles="{start_joints}"/>
-        <SleepAction duration="4.0"/>
-      </Sequence>
-      <Sequence name="kinesics_geben">
-        <MoveArmAction joint_angles="{proxemics_handover}"/>
-        <MoveArmAction joint_angles="{endjoint}"/>
-      </Sequence>
+        </Sequence>
     </Sequence>
   </BehaviorTree>
 </root>

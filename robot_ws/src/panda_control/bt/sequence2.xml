@@ -1,17 +1,18 @@
 <root main_tree_to_execute="sequence2">
   <BehaviorTree ID="sequence2">
-    <Sequence name="sequence">
+    <Sequence name="sequence_proxemics">
       <Sequence name="holen">
         <MoveArmAction joint_angles="{start_joints}"/>
-        <MoveArmAction joint_angles="{rotate_left_joints}"/>
         <MoveArmAction joint_angles="{bend_forward_joints}"/>
+        <GripperAction finger1="0.03" finger2="0.03" gripper_time="0.5"/> <!-- Objekt greifen -->
+        <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> 
         <MoveArmAction joint_angles="{rotate_left_joints}"/>
-        <MoveArmAction joint_angles="{start_joints}"/>
       </Sequence>
       <Sequence name="proxemics_geben">
         <MoveArmAction joint_angles="{proxemics_nearer}"/>
-        <SleepAction duration="5.0"/>  <!-- 5 Sekunden warten -->
+        <SleepAction duration="4.0"/>  <!-- 4 Sekunden warten -->
         <MoveArmAction joint_angles="{proxemics_handover}"/>
+        <MoveArmAction joint_angles="{start_joints}"/>
       </Sequence>
     </Sequence>
   </BehaviorTree>

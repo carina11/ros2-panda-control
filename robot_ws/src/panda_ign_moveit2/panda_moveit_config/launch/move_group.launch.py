@@ -247,6 +247,31 @@ def generate_launch_description():
                 )
             ),
         ),
+        # ros2_control_node (für gz)
+        Node(
+            package="controller_manager",
+            executable="ros2_control_node",
+            output="log",
+            arguments=["--ros-args", "--log-level", log_level],
+            parameters=[
+                robot_description,
+                controller_parameters,
+                {"use_sim_time": use_sim_time},
+            ],
+            condition=(
+                IfCondition(
+                    PythonExpression(
+                        [
+                            "'",
+                            ros2_control_plugin,
+                            "'",
+                            " == ",
+                            "'gz'",
+                        ]
+                    )
+                )
+            ),
+        ),
         # move_group (with execution)
         Node(
             package="moveit_ros_move_group",

@@ -7,18 +7,13 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs)
 find_package(moveit_ros_planning_interface)
 find_package(panda_control_msgs REQUIRED)
-
-set(CMAKE_PREFIX_PATH "/usr/local" ${CMAKE_PREFIX_PATH})
+find_package(ament_index_cpp REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
 

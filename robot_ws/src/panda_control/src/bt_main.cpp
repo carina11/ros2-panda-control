@@ -1,99 +1,122 @@
-#include <behaviortree_cpp_v3/bt_factory.h>
-#include <behaviortree_cpp_v3/xml_parsing.h>
 #include <rclcpp/rclcpp.hpp>
+#include <behaviortree_cpp_v3/bt_factory.h>
+#include <behaviortree_cpp_v3/blackboard.h>
 #include <panda_control_msgs/srv/start_sequence.hpp>
-#include <geometry_msgs/msg/pose.hpp>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 #include <vector>
+#include <string>
+#include <memory>
+#include <cmath> // für M_PI
+
 #include "bt_nodes/move_arm_action.cpp"
 #include "bt_nodes/sleep_action.cpp"
 #include "bt_nodes/gripper_action.cpp"
+#include "bt_nodes/joint_action.cpp"  
+
 
 class BTService : public rclcpp::Node
 {
 public:
-  BTService() : Node("bt_service")
+  BTService() : Node("bt_main")
   {
-    service_ = create_service<panda_control_msgs::srv::StartSequence>(
-      "start_sequence",
-      std::bind(&BTService::handle_request, this, std::placeholders::_1, std::placeholders::_2));
-    RCLCPP_INFO(get_logger(), "BT Service bereit. Rufe mit 'ros2 service call /start_sequence panda_control_msgs/srv/StartSequence \"sequence_id:<id>\"' auf.");
+    // Declare parameters
+    this->declare_parameter("bt_xml_file", "sequence1.xml");
+
+    // Service to start sequence
+    service_ = this->create_service<panda_control_msgs::srv::StartSequence>(
+      "start_sequence", std::bind(&BTService::handle_request, this, std::placeholders::_1, std::placeholders::_2));
+
+    RCLCPP_INFO(this->get_logger(), "BT Service ready. Call /start_sequence with sequence_id");
   }
 
 private:
   void handle_request(const std::shared_ptr<panda_control_msgs::srv::StartSequence::Request> request,
                       std::shared_ptr<panda_control_msgs::srv::StartSequence::Response> response)
   {
-    BT::BehaviorTreeFactory factory;
-    factory.registerNodeType<MoveArmAction>("MoveArmAction");
-    factory.registerNodeType<SleepAction>("SleepAction");
-    factory.registerNodeType<GripperAction>("GripperAction");
-    // Bestimme XML-Datei basierend auf sequence_id
-    std::string xml_file;
-    if (request->sequence_id == 1) {
-      xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence1.xml";
-    } else if (request->sequence_id == 2) {
-      xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence2.xml";
-    } else if (request->sequence_id == 3) {
-      xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence3.xml";
-    } else {
-      response->success = false;
-      response->message = "Unbekannte Sequence-ID: " + std::to_string(request->sequence_id);
-      RCLCPP_ERROR(get_logger(), "Unbekannte Sequence-ID: %d", request->sequence_id);
-      return;
-    }
-
-    // Lade und ticke den Tree
     try {
+      // Select XML based on sequence_id
+      std::string xml_file;
+      switch (request->sequence_id) {
+        case 1: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence1.xml"; break;
+        case 2: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence2.xml"; break;
+        case 3: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence3.xml"; break;
+        case 4: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence4.xml"; break;
+        default: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence1.xml"; break;
+      }
+
+      // Factory ohne shared node
+          BT::BehaviorTreeFactory factory;
+          factory.registerNodeType<MoveArmAction>("MoveArmAction");
+          factory.registerNodeType<SleepAction>("SleepAction");
+          factory.registerNodeType<GripperAction>("GripperAction");
+          factory.registerNodeType<MoveJointAction>("MoveJointAction");
+      // Create tree
       auto tree = factory.createTreeFromFile(xml_file);
+      auto blackboard = tree.rootBlackboard();
 
-      //Startpostion (0, -45, 0, 135, 0, 90, 45)
-      std::vector<double> start_joints = {0.0, -0.7854, 0.0, -2.3562, 0.0, 1.5708, 0.7854};
-      tree.blackboard_stack[0]->set("start_joints", start_joints);
+      // Define joint poses and set blackboard (nach tree-Erstellung)
+      std::vector<double> start_joints = {0.0*M_PI/180.0, -45*M_PI/180.0, 0.0, -135*M_PI/180.0, 0.0, 90*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("start_joints", start_joints);
+        
+      std::vector<double> rotate_left_joints = {90*M_PI/180.0, -45*M_PI/180.0, 0.0, -135*M_PI/180.0, 0.0, 90*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("rotate_left_joints", rotate_left_joints);
 
-      //Nicken
-      std::vector<double> nod_joints = {0.0, -0.7854, 0.0, -2.3562, 0.0, 1.7453, 0.7854};
-      tree.blackboard_stack[0]->set("nod_joints", nod_joints);
+      //NICKEN 
+      std::vector<double> nod_joints = {90*M_PI/180.0, -80*M_PI/180.0, 0.0, -160*M_PI/180.0, 0.0, 130*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("nod_joints", nod_joints);
 
-      // Pick und Place!
-      //Startposition um 90 Grad gedreht nach rechts (90, -45, 0, -135, 0, 90, 45)
-      std::vector<double> rotate_left_joints = {1.5708, -0.7854, 0.0, -2.3562, 0.0, 1.5708, 0.7854};
-      tree.blackboard_stack[0]->set("rotate_left_joints", rotate_left_joints);
-      
-      // Vorne runter (90,20,15,-130,-10,150,90)
-      std::vector<double> bend_forward_joints = {1.5708, 0.3491, 0.2618, -2.2689, -0.1745, 2.6180, 1.5708};
-      tree.blackboard_stack[0]->set("bend_forward_joints", bend_forward_joints);
+      std::vector<double> nod_joints2 = {90*M_PI/180.0, -80*M_PI/180.0, 0.0, -160*M_PI/180.0, 0.0, 120*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("nod_joints2", nod_joints2);
+      //NICKEN VORBEI
 
-      // Proxemics: Näher kommen
-      std::vector<double> proxemics_nearer = {0.0, -0.244, 0.175, -2.042, 0.052, 1.797, 1.012};
-      tree.blackboard_stack[0]->set("proxemics_nearer", proxemics_nearer);
+      //BEND FORWARD
+      std::vector<double> bend_forward_joints = {0.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 160*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("bend_forward_joints", bend_forward_joints);
+      //This object
+      std::vector<double> this_object = {0.0, 15*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 150*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("this_object", this_object);
 
-      //Proxemics: Übergabe
-      std::vector<double> proxemics_handover = {0.000, 0.262, -0.157, -1.361, 0.157, 2.164, 0.785};
-      tree.blackboard_stack[0]->set("proxemics_handover", proxemics_handover);
+      //tAKE OBJECT
+      std::vector<double> take_object_joints = {0.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 160*M_PI/180.0, -45*M_PI/180.0};
+      blackboard->set("take_object_joints", take_object_joints);
 
-      //Kinesics
-      //Endgelenk Übergabe nach proxemics_handover
-      std::vector<double> endjoint = {0.000, 0.262, -0.157, -1.361, 0.157, 2.356, 0.785};
+      //TAKE OBJECT Kinesics
+      std::vector<double> take_object_kinesics = {90*M_PI/180.0, 20*M_PI/180.0, 15*M_PI/180.0, -145*M_PI/180.0, -60*M_PI/180.0, 135*M_PI/180.0, 80*M_PI/180.0};
+      blackboard->set("take_object_kinesics", take_object_kinesics);
 
-      tree.tickRoot();
+      //other
+      std::vector<double> basic_handover_joints = {90*M_PI/180.0, 0.0, 0.0, -1.57, 0.0, 1.57, 0.0};
+      blackboard->set("basic_handover", basic_handover_joints);
+      std::vector<double> proxemics_nearer = {90*M_PI/180.0, -0.3, 0.0, -1.8, 0.0, 1.2, 0.3};
+      blackboard->set("proxemics_nearer", proxemics_nearer);
+      std::vector<double> proxemics_handover = {90*M_PI/180.0, 20*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 115*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("proxemics_handover", proxemics_handover);
+      std::vector<double> endjoint = {90*M_PI/180.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785};
+      blackboard->set("endjoint", endjoint);
 
-      response->success = true;
-      response->message = "Sequence " + std::to_string(request->sequence_id) + " erfolgreich ausgeführt.";
-      RCLCPP_INFO(get_logger(), "Sequence %d ausgeführt.", request->sequence_id);
+      // Tick once
+      BT::NodeStatus status = tree.tickRoot();
+      if (status == BT::NodeStatus::SUCCESS) {
+        RCLCPP_INFO(this->get_logger(), "Sequence %d executed successfully", request->sequence_id);
+        response->success = true;
+      } else {
+        RCLCPP_ERROR(this->get_logger(), "Sequence %d failed with status: %s", request->sequence_id, BT::toStr(status).c_str());
+        response->success = false;
+      }
     } catch (const std::exception& e) {
+      RCLCPP_ERROR(this->get_logger(), "Exception in sequence %d: %s", request->sequence_id, e.what());
       response->success = false;
-      response->message = "Fehler beim Ausführen der Sequence: " + std::string(e.what());
-      RCLCPP_ERROR(get_logger(), "Fehler: %s", e.what());
     }
   }
 
   rclcpp::Service<panda_control_msgs::srv::StartSequence>::SharedPtr service_;
 };
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<BTService>());
+  auto node = std::make_shared<BTService>();
+  rclcpp::spin(node);
   rclcpp::shutdown();
   return 0;
 }

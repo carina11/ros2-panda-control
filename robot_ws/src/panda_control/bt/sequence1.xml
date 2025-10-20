@@ -1,16 +1,21 @@
-<root main_tree_to_execute="sequence1">
+
+<!--In dieser Sequenz wird die Basis Handover Position gezeigt -->ripper-Position bereits gesetzt ist.
+<!-- Es wird davon ausgegangen, dass der Receiver auf der linken Seite des Roboters steht, d.h. die Ausgangsposition ist um 90 Grad gedreht-->
+<root main_tree_to_execute="sequence1"> 
   <BehaviorTree ID="sequence1">
-    <Sequence name="sequence_basis">
+    <Sequence name="sequence_basic">
       <Sequence name="holen">
         <MoveArmAction joint_angles="{start_joints}"/>
-        <MoveArmAction joint_angles="{rotate_left_joints}"/>
         <MoveArmAction joint_angles="{bend_forward_joints}"/>
         <MoveArmAction joint_angles="{rotate_left_joints}"/>
-        <MoveArmAction joint_angles="{start_joints}"/>
       </Sequence>
-      <Sequence name="basic_geben">
-        <MoveArmAction joint_angles="{proxemics_handover}">
+      <Sequence name="handover">
+        <MoveArmAction joint_angles="{basic_handover}"/>
+        <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
+        <MoveArmAction joint_angles="{start_joints}"/>
       </Sequence>
     </Sequence>
   </BehaviorTree>
 </root>
+
+

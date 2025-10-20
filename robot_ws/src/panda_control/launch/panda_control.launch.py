@@ -10,10 +10,11 @@ def generate_launch_description():
     robot_description_package = 'panda_description'
     urdf_file = os.path.join(get_package_share_directory("panda_description"), 'urdf', 'panda.urdf')
     srdf_file = os.path.join(get_package_share_directory("panda_moveit_config"), 'srdf', 'panda.srdf')
-
+    kinematics_file = os.path.join(get_package_share_directory("panda_ign_moveit2"), 'panda_moveit_config', 'config', 'kinematics.yaml')
     # Convert the URDF and SRDF files using xacro (if needed)
     robot_description = {'robot_description': open(urdf_file).read()}
     robot_description_semantic = {'robot_description_semantic': open(srdf_file).read()}
+    robot_description_kinematics = {'robot_description_kinematics': open(kinematics_file).read()}
 
     return LaunchDescription([
         Node(
@@ -21,6 +22,6 @@ def generate_launch_description():
             executable="move_to_pose_server",
             name="move_to_pose_server",
             output="screen",
-            parameters=[robot_description, robot_description_semantic]
-        ), 
+            parameters=[robot_description, robot_description_semantic, robot_description_kinematics]
+        ),
     ])

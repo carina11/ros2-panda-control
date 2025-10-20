@@ -9,7 +9,7 @@
    controller_parameters
   ">
     <gazebo>
-      <plugin filename="ign_ros2_control-system" name="ign_ros2_control::IgnitionROS2ControlPlugin">
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboROS2ControlPlugin">
         <parameters>${controller_parameters}</parameters>
       </plugin>
     </gazebo>
