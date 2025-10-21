@@ -1,8 +1,8 @@
 
-<root main_tree_to_execute="sequence3">
-  <BehaviorTree ID="sequence3">
+<root main_tree_to_execute="sequence2_complete">
+  <BehaviorTree ID="sequence2_complete">
     <Sequence name="sequence_kinesics">
-      <Sequence name="Listening">
+      <Sequence name="Aufmerksamkeit_Human">
         <MoveArmAction joint_angles="{start_joints}"/>
         <MoveArmAction joint_angles="{nod_joints}" velocity_scale="0.9" accel_scale="0.9"/>
         <SleepAction duration="3.0"/>  <!--Warte auf Aufgabenbeschreibung, Watching -->
@@ -16,7 +16,7 @@
         </Repeat>
       </Sequence> 
       <Sequence name="Abholen">
-        <MoveArmAction joint_angles="{bend_forward_joints}"/>
+        <MoveArmAction joint_angles="{bend_forward_joints}" velocity_scale="0.8" accel_scale="0.8"/>
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <Repeat num_cycles="2"> <!--Ist das Dieses Objekt ? -->
           <Sequence>
@@ -26,12 +26,15 @@
         </Repeat>
         <SleepAction duration="2.0"/>  <!-- 3 Sekunden warten, Auf JA/NEIN warten -->
         <MoveArmAction joint_angles="{take_object_joints}"/>
-        <GripperAction finger1="0.03" finger2="0.03" gripper_time="0.5"/>
+        <GripperAction finger1="0.03" finger2="0.03"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> <!-- Objekt greifen -->
         <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="1.0"/>
-        <MoveArmAction joint_angles="{proxemics_handover}" accel_scale="0.8"/>
         <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
         <MoveArmAction joint_angles="{take_object_kinesics}" accel_scale="0.4"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <MoveArmAction joint_angles="{take_object_kinesics_erweitert}" velocity_scale="0.4" accel_scale="0.4"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/> 

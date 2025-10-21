@@ -37,11 +37,14 @@ private:
       // Select XML based on sequence_id
       std::string xml_file;
       switch (request->sequence_id) {
-        case 1: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence1.xml"; break;
-        case 2: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence2.xml"; break;
-        case 3: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence3.xml"; break;
-        case 4: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence4.xml"; break;
-        default: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/sequence1.xml"; break;
+        case 1: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq1_complete.xml"; break;
+        case 2: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq2_complete.xml"; break;
+        case 3: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq3_basic.xml"; break;
+        case 4: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq4_kine.xml"; break;
+        case 5: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq5_kine.xml"; break;
+        case 6: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq6_prox.xml"; break;
+        case 7: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq7_prox.xml"; break;
+        default: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq1_complete.xml"; break;
       }
 
       // Factory ohne shared node
@@ -81,18 +84,27 @@ private:
       blackboard->set("take_object_joints", take_object_joints);
 
       //TAKE OBJECT Kinesics
-      std::vector<double> take_object_kinesics = {90*M_PI/180.0, 20*M_PI/180.0, 15*M_PI/180.0, -145*M_PI/180.0, -60*M_PI/180.0, 135*M_PI/180.0, 80*M_PI/180.0};
+      std::vector<double> take_object_kinesics = {90*M_PI/180.0, 15*M_PI/180.0, 15*M_PI/180.0, -100*M_PI/180.0, -60*M_PI/180.0, 135*M_PI/180.0, 80*M_PI/180.0};
       blackboard->set("take_object_kinesics", take_object_kinesics);
 
+      //Take OBJECT Kinesics erweitert 
+      std::vector<double> take_object_kinesics_erweitert = {90*M_PI/180.0, 12*M_PI/180.0, 12*M_PI/180.0, -110*M_PI/180.0, -45*M_PI/180.0, 145*M_PI/180.0, 96*M_PI/180.0};
+      blackboard->set("take_object_kinesics_erweitert", take_object_kinesics_erweitert);
+
+      std::vector<double> take_object_kinesics_node = {90*M_PI/180.0, 12*M_PI/180.0, 12*M_PI/180.0, -110*M_PI/180.0, -45*M_PI/180.0, 145*M_PI/180.0, 86*M_PI/180.0};
+      blackboard->set("take_object_kinesics_node", take_object_kinesics_node);
       //other
       std::vector<double> basic_handover_joints = {90*M_PI/180.0, 0.0, 0.0, -1.57, 0.0, 1.57, 0.0};
-      blackboard->set("basic_handover", basic_handover_joints);
-      std::vector<double> proxemics_nearer = {90*M_PI/180.0, -0.3, 0.0, -1.8, 0.0, 1.2, 0.3};
+      blackboard->set("basic_handover_joints", basic_handover_joints);
+
+      std::vector<double> basic_handover_joints_gedreht = {90*M_PI/180.0, 0.0, 0.0, -1.57, 0.0, 1.57, 45*M_PI/180.0};
+      blackboard->set("basic_handover_joints_gedreht", basic_handover_joints_gedreht);
+
+      std::vector<double> proxemics_nearer = {90*M_PI/180.0, 5*M_PI/180.0, 10*M_PI/180.0, -135*M_PI/180.0, 0.0, 165*M_PI/180.0, 45*M_PI/180.0};
       blackboard->set("proxemics_nearer", proxemics_nearer);
-      std::vector<double> proxemics_handover = {90*M_PI/180.0, 20*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 115*M_PI/180.0, 45*M_PI/180.0};
+      std::vector<double> proxemics_handover = {90*M_PI/180.0, 20*M_PI/180.0, 10*M_PI/180.0, -115*M_PI/180.0, -10*M_PI/180.0, 160*M_PI/180.0, 45*M_PI/180.0};
       blackboard->set("proxemics_handover", proxemics_handover);
-      std::vector<double> endjoint = {90*M_PI/180.0, -0.785, 0.0, -2.356, 0.0, 1.571, 0.785};
-      blackboard->set("endjoint", endjoint);
+     
 
       // Tick once
       BT::NodeStatus status = tree.tickRoot();

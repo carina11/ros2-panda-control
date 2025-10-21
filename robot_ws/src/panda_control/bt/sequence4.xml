@@ -1,7 +1,0 @@
-<root main_tree_to_execute="sequence4"> 
-  <BehaviorTree ID="sequence4">
-    <Sequence name="sequence_handover">
-         <MoveArmAction joint_angles="{endjoint}"/>
-    </Sequence>
-  </BehaviorTree>
-</root>

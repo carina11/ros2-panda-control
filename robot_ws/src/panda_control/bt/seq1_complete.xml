@@ -1,5 +1,5 @@
 
-<!--In dieser Sequenz wird die Basis Handover Position gezeigt -->ripper-Position bereits gesetzt ist.
+<!--Basis Handover ohne Proxemics/Kinesics -->
 <!-- Es wird davon ausgegangen, dass der Receiver auf der linken Seite des Roboters steht, d.h. die Ausgangsposition ist um 90 Grad gedreht-->
 <root main_tree_to_execute="sequence1"> 
   <BehaviorTree ID="sequence1">
@@ -7,11 +7,17 @@
       <Sequence name="holen">
         <MoveArmAction joint_angles="{start_joints}"/>
         <MoveArmAction joint_angles="{bend_forward_joints}"/>
+        <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>
         <MoveArmAction joint_angles="{rotate_left_joints}"/>
       </Sequence>
       <Sequence name="handover">
         <MoveArmAction joint_angles="{basic_handover}"/>
         <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
+        <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/>
         <MoveArmAction joint_angles="{start_joints}"/>
       </Sequence>
     </Sequence>
