@@ -21,8 +21,9 @@ If docker is not installed on your system, please refer to this page and install
  
 
 ## How to launch / use the service to control the panda robot
-- Launch a service to control the robotic arm   
-`ros2 launch panda_control panda_control.launch.py` 
+- Launch a service to control the rob
+'ros2 launch panda_control panda_control.launch.py otic arm   
+` 
 - Call the service 
 ```
 ros2 service call /move_to_pose panda_control_msgs/srv/MoveToPose "target_pose:

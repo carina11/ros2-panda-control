@@ -44,6 +44,9 @@ private:
         case 5: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq5_kine.xml"; break;
         case 6: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq6_prox.xml"; break;
         case 7: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq7_prox.xml"; break;
+        case 8: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq8_prox.xml"; break;
+        case 9: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq9_prox.xml"; break;
+        case 10: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq10_mix.xml"; break;
         default: xml_file = "/robot_ws/install/panda_control/share/panda_control/bt/seq1_complete.xml"; break;
       }
 
@@ -70,18 +73,39 @@ private:
 
       std::vector<double> nod_joints2 = {90*M_PI/180.0, -80*M_PI/180.0, 0.0, -160*M_PI/180.0, 0.0, 120*M_PI/180.0, 45*M_PI/180.0};
       blackboard->set("nod_joints2", nod_joints2);
+
+      std::vector<double> nod_joints_nearer = {90*M_PI/180.0, -60*M_PI/180.0, 0.0, -166*M_PI/180.0, 0.0, 170*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("nod_joints_nearer", nod_joints_nearer);
+
+      std::vector<double> nod_joints2_nearer = {90*M_PI/180.0, -60*M_PI/180.0, 0.0, -166*M_PI/180.0, 0.0, 155*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("nod_joints2_nearer", nod_joints2_nearer);
       //NICKEN VORBEI
 
       //BEND FORWARD
       std::vector<double> bend_forward_joints = {0.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 160*M_PI/180.0, 45*M_PI/180.0};
       blackboard->set("bend_forward_joints", bend_forward_joints);
+
+      // search object
+      std::vector<double> search_joints_right= {-20*M_PI/180.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 20*M_PI/180.0, 160*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("search_joints_right", search_joints_right);
+
+      std::vector<double> search_joints_left = {20*M_PI/180.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, -20*M_PI/180.0, 160*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("search_joints_left", search_joints_left);
+
       //This object
-      std::vector<double> this_object = {0.0, 15*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 150*M_PI/180.0, 45*M_PI/180.0};
+      std::vector<double> this_object = {0.0, 15*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 150*M_PI/180.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 20*M_PI/180.0, 160*M_PI/180.0, 45*M_PI/180.0, 45*M_PI/180.0};
       blackboard->set("this_object", this_object);
+
+      //Nod for this Object 
+       std::vector<double> bend_forward_joints_nod = {0.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 170*M_PI/180.0, 45*M_PI/180.0};
+      blackboard->set("bend_forward_joints_nod", bend_forward_joints_nod);
 
       //tAKE OBJECT
       std::vector<double> take_object_joints = {0.0, 30*M_PI/180.0, 0.0, -130*M_PI/180.0, 0.0, 160*M_PI/180.0, -45*M_PI/180.0};
       blackboard->set("take_object_joints", take_object_joints);
+
+      
+      //SEQUENCE KINESICS
 
       //TAKE OBJECT Kinesics
       std::vector<double> take_object_kinesics = {90*M_PI/180.0, 15*M_PI/180.0, 15*M_PI/180.0, -100*M_PI/180.0, -60*M_PI/180.0, 135*M_PI/180.0, 80*M_PI/180.0};
@@ -93,6 +117,12 @@ private:
 
       std::vector<double> take_object_kinesics_node = {90*M_PI/180.0, 12*M_PI/180.0, 12*M_PI/180.0, -110*M_PI/180.0, -45*M_PI/180.0, 145*M_PI/180.0, 86*M_PI/180.0};
       blackboard->set("take_object_kinesics_node", take_object_kinesics_node);
+     
+      // Handover Kinesics
+      //Before Handover 
+      std::vector<double> anheben = {90*M_PI/180.0, 0.0, 0.0, -1.2, 0.0, 1.57, 0.0};
+      blackboard->set("anheben", anheben);
+
       //other
       std::vector<double> basic_handover_joints = {90*M_PI/180.0, 0.0, 0.0, -1.57, 0.0, 1.57, 0.0};
       blackboard->set("basic_handover_joints", basic_handover_joints);

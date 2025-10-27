@@ -1,19 +1,27 @@
+<!--Hier werden nacheinander die einzelnen Sequenzen der Kinesics-Handover Bewegungen gezeigt-->
+
 <root main_tree_to_execute="seq4_kine"> 
   <BehaviorTree ID="seq4_kine">
-    <Sequence name="sequence_handover">
-         <MoveArmAction joint_angles="{start_joints}"/>
-         <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
-            <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt greifen -->
-         <MoveArmAction joint_angles="{rotate_left_joints}" velocity_scale="0.5" accel_scale="0.5"/>
-          <MoveArmAction joint_angles="{basic_handover_joints_gedreht}"/>
-          <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
-          <MoveArmAction joint_angles="{basic_handover_joints}"/> 
-          <SleepAction duration="1.0"/>  <!-- 2 Sekunden warten --> 
-          <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
-            <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-            <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/>
-            <MoveArmAction joint_angles="{rotate_left_joints}" velocity_scale="0.5" accel_scale="0.5"/>
-            <MoveArmAction joint_angles="{start_joints}" velocity_scale="0.5" accel_scale="0.5"/>
-    </Sequence>
+      <Sequence name="sequence_kinesics_handover">
+        <Sequence name="start_basic">
+        <MoveArmAction joint_angles="{start_joints}"/>
+        <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt greifen -->
+        <MoveArmAction joint_angles="{rotate_left_joints}"/>
+        </Sequence>
+        
+        <Sequence name="bevor_handover">  <!-- Roboter will das Objekt übergeben-->
+              <Sequence name="question_gesture">
+              
+              </Sequence>
+              <Sequence name="handover_gesture">
+              </Sequence>
+              <Sequence name="lift_object">
+              </Sequence>
+        </Sequence>
+        <Sequence name="handover_process">
+        </Sequence>
+      </Sequence>
   </BehaviorTree>
 </root>

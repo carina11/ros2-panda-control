@@ -1,3 +1,5 @@
+<!-- Veränderung der Nähe /Geschwindigkeit -->
+
 <root main_tree_to_execute="sequence6">
   <BehaviorTree ID="sequence6">
     <Sequence name="sequence_proxemics">
