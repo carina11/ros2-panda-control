@@ -42,3 +42,9 @@ ros2 service call /move_to_pose panda_control_msgs/srv/MoveToPose "target_pose:
 # To check the current pose
 ros2 topic echo /current_pose
 ```
+
+## start Foxglove visualizer
+
+``ros2 launch foxglove_bridge foxglove_bridge_launch.xml``
+connect in the web version or the dektop app to port ws://localhost:8765
+Download dekstop version: https://foxglove.dev/download

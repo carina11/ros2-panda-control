@@ -17,4 +17,6 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./robot_ws/src/:/robot_ws/src/
       - /dev:/dev
+    ports:
+      - "8765:8765"
     command: terminator
