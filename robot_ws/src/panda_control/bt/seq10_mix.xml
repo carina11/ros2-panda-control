@@ -1,10 +1,8 @@
 <root main_tree_to_execute="seq4_kine"> 
   <BehaviorTree ID="seq4_kine">
     <Sequence name="sequence_kinesics_handover">
-        <MoveArmAction joint_angles="{start_joints}"/>
-        <MoveArmAction joint_angles="{take_object_kinesics}"/>
-        <MoveArmAction joint_angles="{take_object_kinesics_erweitert}"/>
-        <MoveArmAction joint_angles="{take_object_kinesics_node}"/>
+        <MoveArmAction joint_angles="{proxemics_nearer}"/>
+        <MoveArmAction joint_angles="{proxemics_handover}"/>
     </Sequence>
   </BehaviorTree>
 </root>

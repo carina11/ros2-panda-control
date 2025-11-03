@@ -6,10 +6,10 @@
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->  
         <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt greifen -->
         <MoveArmAction joint_angles="{rotate_left_joints}" velocity_scale="0.5" accel_scale="0.5"/>
-        <MoveArmAction joint_angles="{take_object_kinesics}"/>
+        <MoveArmAction joint_angles="{give_object_prox1}"/>
         <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten, wartet bis Augenkontakt da ist-->
-        <MoveArmAction joint_angles="{take_object_kinesics_node}" velocity_scale="0.8" accel_scale="0.8"/> 
-        <MoveArmAction joint_angles="{take_object_kinesics}" velocity_scale="0.8" accel_scale="0.8"/>
+        <MoveArmAction joint_angles="{give_object_prox_node}" velocity_scale="0.8" accel_scale="0.8"/> 
+        <MoveArmAction joint_angles="{give_object_prox1}" velocity_scale="0.8" accel_scale="0.8"/>
         <SleepAction duration="1.0"/>  <!-- 1 Sekunden warten --> 
         <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->

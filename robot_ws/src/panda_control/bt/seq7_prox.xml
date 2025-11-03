@@ -1,0 +1,26 @@
+<!-- Jede Proxemics Bewegung eines Handover aufgeteilt in davor-während-danach -->
+
+<root main_tree_to_execute="seq7_prox">
+<BehaviorTree ID="seq7_prox">
+  
+    <Sequence name="sequence_proxemics_handover">
+      <MoveArmAction state_name ="ready"/>
+      <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
+      <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.5" velocity_scale="0.5"/>
+        <Sequence name="before_handover_proxemics">
+          <Sequence name="one_step_approach">
+           <Sequence name="two_steps_approach">
+             <MoveArmAction joint_angles="{basic_handover_joints}" accel_scale="0.7"  velocity_scale="0.7"/>
+              <MoveArmAction joint_angles="{proxemics_nearer}" accel_scale="0.7" velocity_scale="0.7"/>
+           </Sequence>
+        </Sequence>
+        
+        <Sequence name="during_handover_proxemics">
+        </Sequence>
+        
+        <Sequence name="after_handover_proxemics">
+        </Sequence>
+        
+    </Sequence>
+</BehaviorTree>
+</root>

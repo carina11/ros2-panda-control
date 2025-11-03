@@ -4,30 +4,31 @@
     <Sequence name="sequence_kinesics">
       <Sequence name="Aufmerksamkeit_Human">
         <MoveArmAction joint_angles="{start_joints}"/>
-        <MoveArmAction joint_angles="{nod_joints_nearer}" velocity_scale="0.9" accel_scale="0.9"/>
-        <SleepAction duration="3.0"/>  <!--Warte auf Aufgabenbeschreibung, Watching -->
+        <MoveArmAction joint_angles="{gaze}" velocity_scale="0.9" accel_scale="0.9"/>
+        <SleepAction duration="1.0"/>  <!--Warte auf Aufgabenbeschreibung, Watching -->
       </Sequence>
       <!--Andere Gelenke für Nod , näher an "Ursprungsposition", Bewegungsradius verkleinert-->
       <Sequence name="Head_Nod">
-        <Repeat num_cycles="3">
+        <Repeat num_cycles="2">
           <Sequence>
-            <MoveArmAction joint_angles="{nod_joints_nearer}" velocity_scale="0.9" accel_scale="0.9"/>
-            <MoveArmAction joint_angles="{nod_joints2_nearer}" velocity_scale="0.9" accel_scale="0.9"/>
+            <MoveArmAction joint_angles="{gaze}" velocity_scale="0.7" accel_scale="0.9"/>
+            <MoveArmAction joint_angles="{nod_joints}" velocity_scale="0.9" accel_scale="0.9"/>
           </Sequence>
         </Repeat>
       </Sequence> 
       <Sequence name="Abholen">
         <MoveArmAction joint_angles="{bend_forward_joints}" velocity_scale="0.8" accel_scale="0.8"/>
-        <MoveArmAction joint_angles="{search_joints_right}" velocity_scale="0.4" accel_scale="0.8"/>
-        <MoveArmAction joint_angles="{search_joints_left}" velocity_scale="0.4" accel_scale="0.8"/>
-        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-        <Repeat num_cycles="2"> <!--Ist das DIESES Objekt ? -->
+        <MoveArmAction joint_angles="{search_joints_right}" velocity_scale="0.4" accel_scale="0.1"/>
+        <MoveArmAction joint_angles="{search_joints_left}" velocity_scale="0.4" accel_scale="0.1"/>
+        <MoveArmAction joint_angles="{bend_forward_joints}" velocity_scale="0.4" accel_scale="0.4"/>
+        <SleepAction duration="1.0"/>  
+        <Repeat num_cycles="2"> <!--This Object ? -->
           <Sequence>
             <MoveArmAction joint_angles="{this_object}" velocity_scale="0.5" accel_scale="1.0"/>
             <MoveArmAction joint_angles="{bend_forward_joints}" velocity_scale="1.0" accel_scale="1.0"/>
           </Sequence>
         </Repeat>
-        <SleepAction duration="1.0"/>  <!-- 3 Sekunden warten, Auf JA/NEIN warten -->
+        <SleepAction duration="2.0"/>  <!-- Wait for responds -->
         <MoveArmAction joint_angles="{bend_forward_joints_nod}" velocity_scale="0.8" accel_scale="0.8"/>
         <MoveArmAction joint_angles="{bend_forward_joints}" velocity_scale="0.8" accel_scale="0.8"/>
         <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.7" velocity_scale="0.7"/>
@@ -35,15 +36,17 @@
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> <!-- Objekt greifen -->
         <MoveArmAction joint_angles="{rotate_left_joints}" velocity_scale="0.5" accel_scale="1.0"/>
-        <MoveArmAction joint_angles="{take_object_kinesics}" velocity_scale="0.5" accel_scale="0.5"/>
+        <MoveArmAction joint_angles="{give_object_prox1}" velocity_scale="0.4" accel_scale="0.2"/>
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-        <MoveArmAction joint_angles="{take_object_kinesics_erweitert}" velocity_scale="0.3" accel_scale="0.3"/>
+        <MoveArmAction joint_angles="{give_object_prox2}" velocity_scale="0.2" accel_scale="0.1"/>
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/> 
-        <MoveArmAction joint_angles="{nod_joints_nearer}" accel_scale="0.5" velocity_scale="0.5"/> 
-        <SleepAction duration="4.0"/>  <!-- Warten Auf Rückmeldung/Befehl zum Ende Der Aktion -->
+        <MoveArmAction joint_angles="{gaze}" accel_scale="0.5" velocity_scale="0.5"/> 
+        <SleepAction duration="2.0"/>  <!-- Warten Auf Rückmeldung/Befehl zum Ende Der Aktion -->
+        <MoveArmAction joint_angles="{nod_joints}" velocity_scale="0.5" accel_scale="0.5"/>
+        <MoveArmAction joint_angles="{gaze}" velocity_scale="0.5" accel_scale="0.5"/>
         <MoveArmAction joint_angles="{start_joints}" velocity_scale="0.5" accel_scale="0.5"/>
         </Sequence>
     </Sequence>

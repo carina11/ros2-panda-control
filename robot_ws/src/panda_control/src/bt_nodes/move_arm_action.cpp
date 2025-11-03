@@ -48,6 +48,7 @@ public:
   {
     return {
       BT::InputPort<std::vector<double>>("joint_angles"),
+      BT::InputPort<std::string>("state_name"),     // new: optional named state from SRDF
       BT::InputPort<double>("velocity_scale"),   // optional override 0..1
       BT::InputPort<double>("accel_scale"),      // optional override 0..1
       BT::InputPort<double>("move_time"),        // optional override seconds (planning time)
@@ -61,6 +62,7 @@ public:
   {
     // Read inputs once
     auto joint_angles = getInput<std::vector<double>>("joint_angles");
+    auto state_name = getInput<std::string>("state_name");  // new: check for named state
     auto port_vel = getInput<double>("velocity_scale");
     auto port_acc = getInput<double>("accel_scale");
     auto port_move_time = getInput<double>("move_time");
@@ -68,11 +70,13 @@ public:
     auto gf2 = getInput<double>("gripper_f2");
     auto port_grip_time = getInput<double>("gripper_time");
 
-    if (!joint_angles) {
-      RCLCPP_ERROR(node_->get_logger(), "MoveArmAction: No joint_angles provided");
+    // Ensure exactly one of joint_angles or state_name is provided
+    if ((!joint_angles && !state_name) || (joint_angles && state_name)) {
+      RCLCPP_ERROR(node_->get_logger(), "MoveArmAction: Provide either 'joint_angles' or 'state_name', not both or neither");
       return BT::NodeStatus::FAILURE;
     }
-    if (joint_angles->size() < 7) {
+
+    if (joint_angles && joint_angles->size() < 7) {
       RCLCPP_ERROR(node_->get_logger(), "MoveArmAction: joint_angles must contain 7 values");
       return BT::NodeStatus::FAILURE;
     }
@@ -89,17 +93,23 @@ public:
     arm_group_->setMaxAccelerationScalingFactor(acc);
     arm_group_->setPlanningTime(move_time);
 
-    // set arm joint targets
-    std::map<std::string, double> joint_values;
-    joint_values["panda_joint1"] = (*joint_angles)[0];
-    joint_values["panda_joint2"] = (*joint_angles)[1];
-    joint_values["panda_joint3"] = (*joint_angles)[2];
-    joint_values["panda_joint4"] = (*joint_angles)[3];
-    joint_values["panda_joint5"] = (*joint_angles)[4];
-    joint_values["panda_joint6"] = (*joint_angles)[5];
-    joint_values["panda_joint7"] = (*joint_angles)[6];
+    // Set target based on input type
+    if (state_name) {
+      arm_group_->setNamedTarget(*state_name);
+      RCLCPP_INFO(node_->get_logger(), "MoveArmAction: Using named state '%s'", state_name->c_str());
+    } else {
+      // set arm joint targets
+      std::map<std::string, double> joint_values;
+      joint_values["panda_joint1"] = (*joint_angles)[0];
+      joint_values["panda_joint2"] = (*joint_angles)[1];
+      joint_values["panda_joint3"] = (*joint_angles)[2];
+      joint_values["panda_joint4"] = (*joint_angles)[3];
+      joint_values["panda_joint5"] = (*joint_angles)[4];
+      joint_values["panda_joint6"] = (*joint_angles)[5];
+      joint_values["panda_joint7"] = (*joint_angles)[6];
 
-    arm_group_->setJointValueTarget(joint_values);
+      arm_group_->setJointValueTarget(joint_values);
+    }
 
     moveit::planning_interface::MoveGroupInterface::Plan arm_plan;
     auto plan_res = arm_group_->plan(arm_plan);

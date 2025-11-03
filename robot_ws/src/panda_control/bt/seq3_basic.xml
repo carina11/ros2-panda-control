@@ -2,7 +2,7 @@
 <root main_tree_to_execute="seq3_basic">
   <BehaviorTree ID="seq3_basic">
     <Sequence name="sequence_handover_Basic">
-         <MoveArmAction joint_angles="{start_joints}"/>
+         <MoveArmAction state_name ="ready"/>
          <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
          <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt greifen -->
          <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.5" velocity_scale="0.5"/>
