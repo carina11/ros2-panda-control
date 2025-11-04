@@ -4,7 +4,7 @@
   <BehaviorTree ID="seq4_kine">
     <Sequence name="sequence_kinesics_handover">
       <Sequence name="start_basic">
-        <MoveArmAction joint_angles="{start_joints}"/>
+        <MoveArmAction state_name ="ready"/>
         <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
         <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
         <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt greifen -->
@@ -17,15 +17,11 @@
           <SleepAction duration="2.0"/>
           <MoveArmAction joint_angles="{irritation_head}" accel_scale="0.2" velocity_scale="0.5"/>
           <SleepAction duration="2.0"/>
-          <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
-          <SleepAction duration="2.0"/> <!-- Reset-->
           <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
-          <SleepAction duration="3.0"/>
+          <SleepAction duration="4.0"/>
         </Sequence>
 
         <Sequence name="head_shake">
-          <MoveArmAction joint_angles="{gaze}" accel_scale="0.6" velocity_scale="0.6"/>
-          <SleepAction duration="2.0"/>
           <Repeat num_cycles="2">
             <Sequence>
               <MoveArmAction joint_angles="{head_shake_right}" accel_scale="0.9" velocity_scale="0.9"/>
@@ -34,42 +30,42 @@
           </Repeat>
           <MoveArmAction joint_angles="{gaze}" accel_scale="0.5" velocity_scale="0.5"/>
           <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
-          <SleepAction duration="3.0"/>
-          <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
-          <SleepAction duration="2.0"/>
+          <SleepAction duration="4.0"/>
           <Repeat num_cycles="2">
             <Sequence>
               <MoveArmAction joint_angles="{head_shake_gripper_right}" accel_scale="0.9" velocity_scale="0.9"/>
               <MoveArmAction joint_angles="{head_shake_gripper_left}" accel_scale="0.9" velocity_scale="0.9"/>
+              <MoveArmAction joint_angles="{head_shake_gripper_right}" accel_scale="0.9" velocity_scale="0.9"/>
+              <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
+              <SleepAction duration="4.0"/>
             </Sequence>
           </Repeat>
         </Sequence>
 
         <Sequence name="nod_gesture">
-          <SleepAction duration="2.0"/>
-          <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
-          <SleepAction duration="2.0"/>
           <Repeat num_cycles="2">
             <Sequence>
               <MoveArmAction joint_angles="{nod_joints}" accel_scale="0.9" velocity_scale="0.9"/>
               <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
             </Sequence>
           </Repeat>
-          <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
-          <SleepAction duration="3.0"/>
+          <SleepAction duration="4.0"/>
         </Sequence>
       </Sequence>
 
       <Sequence name="take_object_kinesics">
-        <MoveArmAction joint_angles="{bend_forward_joints}" accel_scale="0.7" velocity_scale="0.7"/>
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.7" velocity_scale="0.7"/>
         <SleepAction duration="2.0"/>
         <MoveArmAction joint_angles="{search_joints_right}" accel_scale="0.4" velocity_scale="0.1"/>
         <MoveArmAction joint_angles="{search_joints_left}" accel_scale="0.4" velocity_scale="0.1"/>
-        <MoveArmAction joint_angles="{bend_forward_joints}" accel_scale="0.8" velocity_scale="0.5"/>
-        <MoveArmAction joint_angles="{this_object}" accel_scale="0.5" velocity_scale="0.5"/>
-        <MoveArmAction joint_angles="{bend_forward_joints}" accel_scale="0.8" velocity_scale="0.5"/>
-        <MoveArmAction joint_angles="{this_object}" accel_scale="0.5" velocity_scale="0.5"/>
-        <MoveArmAction joint_angles="{bend_forward_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+        <Repeat num_cycles="2">
+          <Sequence>
+            <MoveArmAction joint_angles="{this_object}" accel_scale="0.5" velocity_scale="0.5"/>
+            <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+          </Sequence>
+        </Repeat>
+        <MoveArmAction joint_angles="{check_reaction}" accel_scale="0.7" velocity_scale="0.7"/>
         <SleepAction duration="2.0"/>
         <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.7" velocity_scale="0.7"/>
         <GripperAction finger1="0.03" finger2="0.03"/>
@@ -83,85 +79,85 @@
           <Sequence name="approaching">
             <Sequence name="include_break">
               <MoveArmAction joint_angles="{kinesics_nearer}" accel_scale="0.3" velocity_scale="0.3"/>
-              <SleepAction duration="1.0"/>
+              <SleepAction duration="3.0"/>
               <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.3" velocity_scale="0.3"/>
             </Sequence>
-
-            <Sequence name="speed_adjustment">
+            <!--Start from Rotate left-->
+            <!-- <Sequence name="speed_adjustment">
               <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.5" velocity_scale="0.5"/>
               <MoveArmAction joint_angles="{kinesics_handover_speedbreak}" accel_scale="0.9" velocity_scale="0.9"/>
               <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
-            </Sequence>
+            </Sequence> -->
           </Sequence>
 
           <Sequence name="transfer_signal">
-            <Sequence name="eye_contact_signal">
-              <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
+            <Sequence name="waiting">
               <MoveArmAction joint_angles="{kinesics_handover}"/>
               <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten, wartet bis Augenkontakt da ist-->
               <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> <!-- Objekt loslassen -->
               <SleepAction duration="1.0"/>  <!-- 1 Sekunden warten -->
               <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.9"/>
+              <SleepAction duration="4.0"/> 
+            </Sequence>
+            <Sequence name="eye_contact_signal">
+              <MoveArmAction joint_angles="{kinesics_handover}"/>
+              <MoveArmAction joint_angles="{eye_contact_adjustment}" accel_scale="0.5" velocity_scale="0.5"/>
+              <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten, wartet bis Augenkontakt da ist-->
+              <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
+              <SleepAction duration="1.0"/>  <!-- 1 Sekunden warten -->
+              <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> <!-- Objekt loslassen -->
+              <SleepAction duration="1.0"/>  <!-- 1 Sekunden warten -->
+              <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.9"/>
+              <SleepAction duration="5.0"/>  <!-- 1 Sekunden warten -->
             </Sequence>
             <Sequence name="beckoning_gesture">
-              <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-              <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.7" velocity_scale="0.7"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
               <Repeat num_cycles="2">
                 <Sequence>
                   <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.7" velocity_scale="0.7"/>
                   <MoveArmAction joint_angles="{beckoning_gesture}" accel_scale="0.9" velocity_scale="0.9"/>
                 </Sequence>
               </Repeat>
-              <SleepAction duration="1.5"/>  <!-- 1 Sekunden warten -->
-              <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> <!-- Objekt loslassen -->
-              <SleepAction duration="1.0"/>  <!-- 1 Sekunden warten -->
+              <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
+              <SleepAction duration="3.0"/>  
+              <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> 
+              <SleepAction duration="1.0"/> 
               <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>
+              <SleepAction duration="5.0"/>  
             </Sequence>
             <Sequence name="palm_presenting_gesture">
-              <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-              <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
               <MoveArmAction joint_angles="{palm_presenting}" accel_scale="0.2" velocity_scale="0.2"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-              <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> <!-- Objekt loslassen -->
-              <SleepAction duration="1.0"/>  <!-- 1 Sekunden warten -->
+              <SleepAction duration="3.0"/>
+              <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/>
+              <SleepAction duration="1.0"/> 
               <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>
+              <SleepAction duration="5.0"/> 
             </Sequence>
             <Sequence name="mini_lift_gesture">
-              <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.9" velocity_scale="0.9"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-              <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.9" velocity_scale="0.9"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
               <MoveArmAction joint_angles="{mini_lift}" accel_scale="0.4" velocity_scale="0.4"/>
-              <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+              <SleepAction duration="3.0"/>  <!-- 2 Sekunden warten -->
               <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> <!-- Objekt loslassen -->
               <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>
+              <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
+              <SleepAction duration="5.0"/> 
             </Sequence>
           </Sequence>
           <Sequence name="withold_signal">
-            <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.7" velocity_scale="0.7"/>
-            <MoveArmAction joint_angles="{kinesics_handover_speedbreak}" accel_scale="0.5" velocity_scale="0.5"/>
+            <MoveArmAction joint_angles="{kinesics_nearer}" accel_scale="0.5" velocity_scale="0.5"/>
             <MoveArmAction joint_angles="{halt}" accel_scale="0.9" velocity_scale="0.9"/>
             <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
             <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.2" velocity_scale="0.2"/>
             <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/> <!-- Objekt loslassen -->
-            <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>
           </Sequence>
         </Sequence>
       </Sequence>
 
       <Sequence name="post_handover">
-        <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.5" velocity_scale="0.5"/>
-        <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
-        <GripperAction finger1="0.030" finger2="0.030" gripper_time="0.5"/>
-        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <SleepAction duration="3.0"/>  <!-- 2 Sekunden warten -->
         <MoveArmAction joint_angles="{nod_after_kin_handover}" accel_scale="0.9" velocity_scale="0.9"/>
         <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.5" velocity_scale="0.5"/>
-        <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/>
         <MoveArmAction joint_angles="{rotate_left_joints}" accel_scale="0.5" velocity_scale="0.5"/>
+        <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/>
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.5" velocity_scale="0.5"/>
       </Sequence>
     </Sequence>
   </BehaviorTree>

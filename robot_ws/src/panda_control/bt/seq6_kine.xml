@@ -1,19 +1,60 @@
-<root main_tree_to_execute="seq4_kine"> 
-  <BehaviorTree ID="seq4_kine">
-    <Sequence name="sequence_handover">
-         <MoveArmAction joint_angles="{start_joints}"/>
-         <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
-            <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt greifen -->
-         <MoveArmAction joint_angles="{rotate_left_joints}" velocity_scale="0.5" accel_scale="0.5"/>
-          <MoveArmAction joint_angles="{basic_handover_joints_gedreht}"/>
-          <SleepAction duration="3.0"/>  <!-- 3 Sekunden warten -->
-          <MoveArmAction joint_angles="{basic_handover_joints}"/> 
-          <SleepAction duration="1.0"/>  <!-- 2 Sekunden warten --> 
-          <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/> <!-- Objekt loslassen -->
-            <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
-            <GripperAction finger1="0.00" finger2="0.00" gripper_time="0.5"/>
-            <MoveArmAction joint_angles="{rotate_left_joints}" velocity_scale="0.5" accel_scale="0.5"/>
-            <MoveArmAction joint_angles="{start_joints}" velocity_scale="0.5" accel_scale="0.5"/>
+<root main_tree_to_execute="seq6_kine"> 
+  <BehaviorTree ID="seq6_kine">
+    <Sequence name="sequence_kinesics_handover3">
+      <Sequence name="start">
+        <MoveArmAction joint_angles="{start_joints}"/>
+        <GripperAction finger1="0.0" finger2="0.0"/> <!-- Objekt greifen -->
+        <MoveArmAction joint_angles="{gaze}" accel_scale="0.6" velocity_scale="0.7"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <MoveArmAction joint_angles="{head_shake_right}" accel_scale="0.9" velocity_scale="0.9"/>
+        <MoveArmAction joint_angles="{head_shake_left}" accel_scale="0.9" velocity_scale="0.9"/>
+        <MoveArmAction joint_angles="{gaze}" accel_scale="0.5" velocity_scale="0.5"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <Repeat num_cycles="1">
+          <Sequence>
+            <MoveArmAction joint_angles="{nod_joints}" accel_scale="0.5" velocity_scale="0.5"/>
+            <MoveArmAction joint_angles="{gaze}" accel_scale="0.5" velocity_scale="0.5"/>
+          </Sequence>
+        </Repeat>
+      </Sequence>
+
+      <Sequence name="take_object_kinesics">
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.7" velocity_scale="0.7"/>
+        <MoveArmAction joint_angles="{search_joints_right}" accel_scale="0.4" velocity_scale="0.1"/>
+        <MoveArmAction joint_angles="{search_joints_left}" accel_scale="0.4" velocity_scale="0.1"/>
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+        <Repeat num_cycles="1">
+          <Sequence>
+            <MoveArmAction joint_angles="{this_object}" accel_scale="0.5" velocity_scale="0.5"/>
+            <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+          </Sequence>
+        </Repeat>
+        <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.7" velocity_scale="0.7"/>
+        <GripperAction finger1="0.03" finger2="0.03"/>
+        <SleepAction duration="2.0"/>
+        <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> <!-- Objekt greifen -->
+      </Sequence>
+
+      <Sequence name="handover">
+        <MoveArmAction joint_angles="{kinesics_nearer}" accel_scale="0.9" velocity_scale="0.9"/>
+        <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.3" velocity_scale="0.3"/> 
+        <SleepAction duration="5.0"/>  
+        <Repeat num_cycles="2">
+          <Sequence>
+            <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.7" velocity_scale="0.7"/>
+            <MoveArmAction joint_angles="{beckoning_gesture}" accel_scale="0.9" velocity_scale="0.9"/>
+          </Sequence>
+        </Repeat>
+        <MoveArmAction joint_angles="{kinesics_handover}" accel_scale="0.2" velocity_scale="0.2"/>
+        <SleepAction duration="2.0"/>
+        <MoveArmAction joint_angles="{palm_presenting}" accel_scale="0.2" velocity_scale="0.2"/>
+        <GripperAction finger1="0.035" finger2="0.035" gripper_time="0.5"/>
+        <SleepAction duration="4.0"/> 
+        <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <MoveArmAction joint_angles="{nod_joints}" accel_scale="0.9" velocity_scale="0.9"/>
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.5" velocity_scale="0.5"/>
+      </Sequence>
     </Sequence>
   </BehaviorTree>
 </root>

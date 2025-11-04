@@ -1,8 +1,55 @@
-<root main_tree_to_execute="seq4_kine"> 
-  <BehaviorTree ID="seq4_kine">
-    <Sequence name="sequence_kinesics_handover">
-        <MoveArmAction joint_angles="{proxemics_nearer}"/>
-        <MoveArmAction joint_angles="{proxemics_handover}"/>
+<!-- Mischung aus Kinesics und Proxemics für einen realistischen Handover -->
+
+<root main_tree_to_execute="seq10_mix"> 
+  <BehaviorTree ID="seq10_mix">
+    <Sequence name="sequence_mixed_handover">
+      <!-- Start: Roboter bereit machen und Objekt greifen -->
+      <Sequence name="start">
+        <MoveArmAction state_name="ready"/>
+        <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
+        <SleepAction duration="2.0"/>  <!-- Warte auf Aufgabenbeschreibung, Watching -->
+        <MoveArmAction joint_angles="{nod_joints}" accel_scale="0.8" velocity_scale="0.8"/>
+        <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>
+        <SleepAction duration="2.0"/>  <!-- 2 Sekunden warten -->
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.8"/>
+        <MoveArmAction joint_angles="{search_joints_right}" accel_scale="0.4" velocity_scale="0.1"/>
+        <MoveArmAction joint_angles="{search_joints_left}" accel_scale="0.4" velocity_scale="0.1"/>
+        <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+        <Repeat num_cycles="2">
+          <Sequence>
+            <MoveArmAction joint_angles="{this_object}" accel_scale="0.5" velocity_scale="0.5"/>
+            <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
+          </Sequence>
+        </Repeat>
+        <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.7" velocity_scale="0.7"/>
+        <GripperAction finger1="0.03" finger2="0.03"/> <!-- Objekt greifen -->
+        <SleepAction duration="1.0"/>
+        <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/>  <!-- Objekt sicher halten -->
+      </Sequence>
+
+      <!-- Pre-Handover: Mischung aus Proxemics (Annäherung) und Kinesics (Gesten) -->
+      <Sequence name="pre_handover">
+        <!-- Proxemics: Langsame Annäherung in Schritten -->
+        <Sequence name="proxemics_approach">
+          <MoveArmAction joint_angles="{before_half_straight_arm}" accel_scale="0.4" velocity_scale="0.4"/>  <!-- Erster Schritt näher -->
+          <MoveArmAction joint_angles="{half_straight_arm}" accel_scale="0.4" velocity_scale="0.4"/>  <!-- Zweiter Schritt, Handover-Position -->
+          <SleepAction duration="2.0"/>
+          <Repeat num_cycles="2">
+            <Sequence>
+              <MoveArmAction joint_angles="{beckoning_from_half}" accel_scale="0.9" velocity_scale="0.9"/>  <!-- Feinjustierung zur menschlichen Position -->
+              <MoveArmAction joint_angles="{half_straight_arm}" accel_scale="0.9" velocity_scale="0.9"/>  <!-- Arm vollständig ausstrecken -->
+            </Sequence>
+          </Repeat>
+          <SleepAction duration="4.0"/>
+          <MoveArmAction joint_angles="{follow_arm_half}" accel_scale="0.1" velocity_scale="0.1"/>  <!-- Letzte Anpassung -->
+          <GripperAction finger1="0.035" finger2="0.035" gripper_time="1.5"/>  <!-- Objekt festhalten während der Annäherung -->
+          <SleepAction duration="2.0"/>
+          <MoveArmAction joint_angles="{before_half_straight_arm}" accel_scale="0.3" velocity_scale="0.4"/>  <!-- Erster Schritt näher -->
+          <MoveArmAction joint_angles="{gaze}" accel_scale="0.9" velocity_scale="0.9"/>  <!-- Blickkontakt -->
+          <MoveArmAction joint_angles="{nod_joints}" accel_scale="0.4" velocity_scale="0.4"/>  <!-- Nicken -->
+          <MoveArmAction joint_angles="{start_joints}" accel_scale="0.9" velocity_scale="0.9"/>  <!-- Zurück zur Startposition -->
+        </Sequence>
+      </Sequence>
     </Sequence>
   </BehaviorTree>
 </root>
