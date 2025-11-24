@@ -195,8 +195,8 @@ private:
       std::vector<double> half_straight_arm = {50*M_PI/180.0, 30*M_PI/180.0, 60*M_PI/180.0, -76*M_PI/180.0, 35*M_PI/180.0, 140*M_PI/180.0, 60*M_PI/180.0};
       blackboard->set("half_straight_arm", half_straight_arm);
 
-      // std::vector<double> straight_arm = {90*M_PI/180.0, 35*M_PI/180.0, 7*M_PI/180.0, -70*M_PI/180.0, -10*M_PI/180.0, 175*M_PI/180.0, -3*M_PI/180.0};
-      // blackboard->set("straight_arm", straight_arm);
+      std::vector<double> straight_arm = {90*M_PI/180.0, 35*M_PI/180.0, 7*M_PI/180.0, -70*M_PI/180.0, -10*M_PI/180.0, 175*M_PI/180.0, -3*M_PI/180.0};
+      blackboard->set("straight_arm", straight_arm);
       
       // //Physical Handover--------
       
