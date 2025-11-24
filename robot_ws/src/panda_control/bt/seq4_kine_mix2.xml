@@ -29,9 +29,10 @@
             <MoveArmAction joint_angles="{start_joints}" accel_scale="0.8" velocity_scale="0.5"/>
           </Sequence>
         </Repeat>
-        <MoveArmAction joint_angles="{check_reaction}" accel_scale="0.7" velocity_scale="0.7"/>
+        <MoveArmAction joint_angles="{gaze_head}" accel_scale="0.7" velocity_scale="0.7"/>
         <SleepAction duration="2.0"/>
-        <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.7" velocity_scale="0.7"/>
+        <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.4" velocity_scale="0.4"/>
+        <SleepAction duration="1.0"/>
         <GripperAction finger1="0.03" finger2="0.03"/>
         <SleepAction duration="2.0"/>
         <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> <!-- Objekt greifen -->

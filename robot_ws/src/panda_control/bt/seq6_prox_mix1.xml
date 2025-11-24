@@ -1,0 +1,58 @@
+<!-- Jede Proxemics Bewegung eines Handover aufgeteilt in davor-während-danach -->
+<root main_tree_to_execute="seq6_prox_mix1">
+  <BehaviorTree ID="seq6_prox_mix1">
+    <Sequence name="proxemics_full_handover_sequence">
+      <!-- 1. Rotate-left joints -->
+      <MoveArmAction joint_angles="{rotate_left_joints}"
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+
+      <!-- 2. Gaze towards human -->
+      <MoveArmAction joint_angles="{gaze}" 
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+      <SleepAction duration="3.0"/>
+
+      <!-- 3. Back to start joints -->
+      <MoveArmAction joint_angles="{start_joints}"
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+
+      <!-- 4. Grasp object -->
+      <MoveArmAction joint_angles="{take_object_joints}" accel_scale="0.7" velocity_scale="0.7"/>
+      <GripperAction finger1="0.03" finger2="0.03"/>
+      <SleepAction duration="2.0"/>
+      <GripperAction finger1="0.015" finger2="0.015" gripper_time="0.5"/> <!-- Objekt greifen -->
+      
+
+      <!-- 5. Proxemic give object path + nod -->
+      <MoveArmAction joint_angles="{give_object_prox1}"
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+      <MoveArmAction joint_angles="{give_object_prox2}"
+                     accel_scale="0.3"
+                     velocity_scale="0.3"/>
+      <MoveArmAction joint_angles="{give_object_prox_nod}"
+                     accel_scale="0.3"
+                     velocity_scale="0.3"/>
+      <GripperAction finger1="0.03" finger2="0.03"/>
+      <SleepAction duration="3.0"/>
+
+      <!-- 6.  small retreat -->
+      <MoveArmAction joint_angles="{give_object_prox1}"
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+
+      <!-- 7. Gaze again (confirm end of interaction) -->
+      <MoveArmAction joint_angles="{gaze}" 
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+      <SleepAction duration="3.0"/>
+      <!-- 8. Return to start joints -->
+      <MoveArmAction joint_angles="{start_joints}"
+                     accel_scale="0.8"
+                     velocity_scale="0.8"/>
+
+    </Sequence>
+  </BehaviorTree>
+</root>
